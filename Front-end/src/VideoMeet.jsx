@@ -265,8 +265,15 @@ export default function VideoMeetComponent() {
     }
   };
 
-  let addMessage = (message) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
+  let addMessage = (data, message, soketIdSender) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: sender, data: data },
+    ]);
+
+    if (soketIdSender === socketIdRef.current) {
+      setMessages((prevMessages) => prevMessages + 1);
+    }
   };
 
   let connectToSocketServer = () => {
@@ -393,69 +400,6 @@ export default function VideoMeetComponent() {
             })
             .catch((e) => console.log(e));
         }
-        stream.getTracks().forEach(
-          (track) =>
-            (track.onended = () => {
-              setVideo(false);
-              setAudio(false);
-
-              try {
-                let track = localVideoRef.current.srcObject.getTracks();
-                track.forEach((track) => track.stop());
-              } catch (e) {
-                console.log(e);
-              }
-
-              let blackSilence = (...args) =>
-                new MediaStream([black(...args), silence()]);
-              window.localStream = blackSilence();
-              localVideoRef.current.srcObject = window.localStream;
-
-              for (let id in connections) {
-                connections[id].getSenders().forEach((sender) => {
-                  connections[id].removeTrack(sender);
-                });
-
-                window.localStream.getTracks().forEach((track) => {
-                  connections[id].addTrack(track, window.localStream);
-                });
-
-                connections[id].createOffer().then((description) => {
-                  connections[id]
-                    .setLocalDescription(description)
-                    .then(() => {
-                      socketRef.current.emit(
-                        "signal",
-                        id,
-                        JSON.stringify({
-                          sdp: connections[id].localDescription,
-                        }),
-                      );
-                    })
-                    .catch((e) => console.log(e));
-                });
-              }
-            }),
-        );
-        stream.getTracks().forEach(
-          (track) =>
-            (track.onended = () => {
-              setScreen(false);
-
-              try {
-                let track = localVideoRef.current.srcObject.getTracks();
-                track.forEach((track) => track.stop());
-              } catch (e) {
-                console.log(e);
-              }
-
-              let blackSilence = (...args) =>
-                new MediaStream([black(...args), silence()]);
-              window.localStream = blackSilence();
-              localVideoRef.current.srcObject = window.localStream;
-              getUserMedia();
-            }),
-        );
       }
     });
   };
@@ -609,6 +553,11 @@ export default function VideoMeetComponent() {
     setScreen(!screen);
   };
 
+  let sendMessage = () => {
+    socketRef.current.emit("chat-message", message, username);
+    setMessage("");
+  };
+
   return (
     <div className="">
       {askForUserName === true ? (
@@ -640,12 +589,15 @@ export default function VideoMeetComponent() {
             <div className="chatroom">
               Chat
               <div className="chat">
+                {message}
                 <input
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   type="text"
                   className="messagebox"
                   placeholder="Message..."
                 />
-                <SendSharpIcon className="sendIcon" />
+                <SendSharpIcon className="sendIcon" onClick={sendMessage} />
               </div>
             </div>
           ) : (

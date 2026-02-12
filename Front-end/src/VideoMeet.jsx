@@ -265,14 +265,15 @@ export default function VideoMeetComponent() {
     }
   };
 
-  let addMessage = (data, message, soketIdSender) => {
+  let addMessage = (data, sender, soketIdSender) => {
+    console.log("Received message:", { data, sender, soketIdSender });
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: sender, data: data },
     ]);
 
-    if (soketIdSender === socketIdRef.current) {
-      setMessages((prevMessages) => prevMessages + 1);
+    if (soketIdSender !== socketIdRef.current) {
+      setNewMessage((prevCount) => prevCount + 1);
     }
   };
 
@@ -294,7 +295,7 @@ export default function VideoMeetComponent() {
     socketRef.current.on("signal", gotMessageFromServer);
 
     // Set up message handler
-    socketRef.current.on("message", addMessage);
+    socketRef.current.on("chat-message", addMessage);
 
     // Set up user-left handler
     socketRef.current.on("user-left", (id) => {
@@ -554,6 +555,30 @@ export default function VideoMeetComponent() {
   };
 
   let sendMessage = () => {
+    if (!message.trim()) {
+      console.log("Cannot send empty message");
+      return; // Don't send empty messages
+    }
+
+    // Validate socket connection
+    if (!socketRef.current || !socketRef.current.connected) {
+      console.error("Socket is not connected. Cannot send message.");
+      alert("Connection lost. Please refresh the page.");
+      return;
+    }
+
+    // Validate username
+    if (!username || username.trim() === "") {
+      console.error("Username is not set");
+      alert("Please set a username before sending messages.");
+      return;
+    }
+
+    console.log("Sending message:", {
+      message,
+      username,
+      socketId: socketRef.current.id,
+    });
     socketRef.current.emit("chat-message", message, username);
     setMessage("");
   };
@@ -568,14 +593,16 @@ export default function VideoMeetComponent() {
             id="outlined-basic"
             label="Enter UserName"
             variant="outlined"
+            value={username}
+            onChange={(e) => setUserName(e.target.value)}
             // className="white"
           />
-          <Button variant="contained" onClick={connectToSocketServer}>
+          <Button variant="contained" onClick={getMedia}>
             Connect
           </Button>
           <div className="flex ml-30px">
             <video
-              className="w-2xl rounded-xl    "
+              className="w-2xl rounded-xl"
               ref={localVideoRef}
               autoPlay
               muted>
@@ -587,17 +614,35 @@ export default function VideoMeetComponent() {
         <div className="videoMeet">
           {showModal ? (
             <div className="chatroom">
-              Chat
+              <h1>Chat</h1>
+              <div className="chatdisplay">
+                {messages.map((item, index) => {
+                  return (
+                    <div className="msg" key={index}>
+                      <div id="#usename">{item.sender}</div>
+                      <div id="#message">{item.data}</div>
+                    </div>
+                  );
+                })}
+              </div>
               <div className="chat">
-                {message}
                 <input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      sendMessage();
+                    }
+                  }}
                   type="text"
                   className="messagebox"
                   placeholder="Message..."
                 />
-                <SendSharpIcon className="sendIcon" onClick={sendMessage} />
+                <SendSharpIcon
+                  role="button"
+                  className="sendIcon"
+                  onClick={sendMessage}
+                />
               </div>
             </div>
           ) : (
@@ -679,7 +724,10 @@ export default function VideoMeetComponent() {
 
             <Badge
               badgeContent={newMessage}
-              onClick={() => setShowModal(!showModal)}
+              onClick={() => {
+                setShowModal(!showModal);
+                setNewMessage(0); // Reset counter when opening chat
+              }}
               color="secondary">
               <MarkChatUnreadOutlinedIcon className="svg1 " />
             </Badge>

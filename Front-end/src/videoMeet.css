@@ -183,6 +183,7 @@
   border: 2px solid rgba(255, 255, 255, 0.667);
   border-left: none;
   margin-top: 0.7rem;
+  z-index: 100;
 }
 .messagebox {
   border: 1.02px solid white;
@@ -208,10 +209,24 @@
   border-radius: 50%;
   right: 2vw;
   align-items: center;
+  cursor: pointer;
 }
 
 .chatroom svg {
   padding: 0.8dvw;
   font-size: 3.7dvw;
   color: black;
+}
+.msg {
+  margin-top: 1.2rem;
+  padding-left: 1rem;
+  border-left: 2px solid white;
+  color: white;
+  font-size: 1.2rem;
+}
+#username {
+  font-weight: bold;
+}
+#message {
+  font-weight: 100;
 }

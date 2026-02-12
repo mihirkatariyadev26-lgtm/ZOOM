@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+.videoMeet {
+  background-color: rgb(0, 0, 0);
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+}
+.meetUserVideo {
+  position: absolute;
+  bottom: 0;
+  min-height: 10vh;
+  height: 30vh;
+  padding: 0.3rem;
+  /* background-color: rgba(96, 96, 96, 0.409); */
+  width: fit-content;
+  /* min-width: 30vw; */
+  right: 0.5vw;
+  bottom: 16vh;
+  border-radius: 2rem;
+  z-index: 1;
+}
+.confrenceView {
+  display: flex;
+  /* align-items: top; */
+  justify-content: space-around;
+  padding-top: 1rem;
+  padding-bottom: 5.8rem;
+  flex-wrap: wrap;
+  /* flex-wrap: 3;   */
+  width: fit-content;
+  height: fit-content;
+  /* height: fit-content; */
+
+  border-radius: 1rem;
+  /* scale: calc(1 / 2);   */
+}
+
+/* Fullscreen mode - when only 1 remote participant */
+.confrenceView.fullscreen-mode {
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Grid mode - when multiple participants */
+.confrenceView.grid-mode {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  padding-bottom: 12vh;
+}
+
+/* Video container for fullscreen */
+.video-container.fullscreen-video {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  align-items: center;
+}
+
+/* Video container for grid */
+.video-container.grid-video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.size {
+  height: 5vh;
+  width: 100%;
+  display: flex;
+  /* scale: calc(1 / 2); */
+  border-radius: 2rem;
+  /* display: flex; */
+  /* margin-left: 0px; */
+}
+.conf-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+.buttonContainers {
+  position: absolute;
+  background-color: rgb(34, 33, 33);
+  width: 60vw;
+  height: fit-content;
+
+  bottom: 10px;
+  border-radius: 2rem;
+  display: flex;
+  padding: 1rem;
+  align-items: center;
+  /* gap: 9.4vw; */
+  justify-content: space-between;
+}
+
+.svg1 {
+  height: fit-content;
+  width: fit-content;
+  color: black;
+  background-color: white;
+
+  border-radius: 2rem;
+}
+.buttonContainers svg {
+  padding: 1dvw;
+  font-size: 4dvw;
+}
+.callend {
+  height: fit-content;
+  width: fit-content;
+  color: black;
+  background-color: red;
+  padding: 1fr;
+  border-radius: 2rem;
+}
+.onboarding {
+  /* background-color: black; */
+  /* display: flex; */
+  /* color: white;
+   */
+  color: black;
+}
+.white {
+  color: white;
+  border: white;
+}
+
+/* Responsive breakpoints for grid mode */
+@media (max-width: 768px) {
+  .confrenceView.grid-mode {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    padding-bottom: 12vh;
+  }
+
+  .video-container.grid-video {
+    border-radius: 0.5rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .confrenceView.grid-mode {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (min-width: 1025px) {
+  .confrenceView.grid-mode {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+.chatroom {
+  position: absolute;
+  height: 80vh;
+  background-color: rgba(0, 0, 0, 0.692);
+  color: white;
+  left: 0;
+  font-weight: 700;
+  font-size: 1.3rem;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  padding: 1.2rem;
+  width: 30vw;
+  border: 2px solid rgba(255, 255, 255, 0.667);
+  border-left: none;
+  margin-top: 0.7rem;
+}
+.messagebox {
+  border: 1.02px solid white;
+
+  left: 0.8rem;
+  font-size: 1.05rem;
+  width: 23vw;
+  font-weight: 100;
+  border-radius: 1rem;
+  padding-left: 1rem;
+  align-items: center;
+}
+.chat {
+  position: absolute;
+  bottom: 1.2rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  left: 0.1rem;
+}
+.sendIcon {
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  right: 2vw;
+  align-items: center;
+}
+
+.chatroom svg {
+  padding: 0.8dvw;
+  font-size: 3.7dvw;
+  color: black;
+}

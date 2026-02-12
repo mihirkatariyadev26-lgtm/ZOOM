@@ -217,16 +217,20 @@
   font-size: 3.7dvw;
   color: black;
 }
+.chatdisplay {
+  margin-top: 1rem;
+  height: 70vh;
+}
 .msg {
-  margin-top: 1.2rem;
+  margin-top: 0.1rem;
   padding-left: 1rem;
-  border-left: 2px solid white;
   color: white;
   font-size: 1.2rem;
+  /* background-color: black; */
 }
-#username {
+.username {
   font-weight: bold;
 }
-#message {
+.msg-content {
   font-weight: 100;
 }

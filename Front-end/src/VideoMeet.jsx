@@ -36,7 +36,7 @@ export default function VideoMeetComponent() {
   let [showModal, setShowModal] = useState(false);
   let [messages, setMessages] = useState([]);
   let [message, setMessage] = useState("");
-  let [newMessage, setNewMessage] = useState(3);
+  let [newMessage, setNewMessage] = useState(0);
   let [askForUserName, setAskForUserName] = useState(true);
   let [username, setUserName] = useState("");
   const videoRef = useRef([]);
@@ -269,7 +269,7 @@ export default function VideoMeetComponent() {
     console.log("Received message:", { data, sender, soketIdSender });
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: sender, data: data },
+      { sender: sender, data: data, socketIdSender: soketIdSender },
     ]);
 
     if (soketIdSender !== socketIdRef.current) {
@@ -618,9 +618,17 @@ export default function VideoMeetComponent() {
               <div className="chatdisplay">
                 {messages.map((item, index) => {
                   return (
-                    <div className="msg" key={index}>
-                      <div id="#usename">{item.sender}</div>
-                      <div id="#message">{item.data}</div>
+                    <div
+                      className="msg"
+                      key={index}
+                      style={{
+                        borderLeft:
+                          item.socketIdSender === socketIdRef.current
+                            ? "3px solid #ce0b0b"
+                            : "3px solid #0bcece",
+                      }}>
+                      <div className="username">{item.sender}</div>
+                      <div className="msg-content">{item.data}</div>
                     </div>
                   );
                 })}

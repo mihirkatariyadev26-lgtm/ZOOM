@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import "./videoMeet.css";
 import Button from "@mui/material/Button";
 import io from "socket.io-client";
@@ -14,6 +14,8 @@ import MarkChatUnreadOutlinedIcon from "@mui/icons-material/MarkChatUnreadOutlin
 import SendSharpIcon from "@mui/icons-material/SendSharp";
 
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./context/Authentication";
+import axios from "axios";
 const serverurl = "http://localhost:9000";
 
 const connections = {};
@@ -25,6 +27,7 @@ export default function VideoMeetComponent() {
   const socketRef = useRef();
   let socketIdRef = useRef();
   const navigate = useNavigate();
+  const { userData } = useContext(AuthContext);
   let localVideoRef = useRef();
   let [videoAvailable, setVideoAvailable] = useState(true);
   let [audioAvailable, setAudioAvailable] = useState(true);
@@ -41,6 +44,25 @@ export default function VideoMeetComponent() {
   let [username, setUserName] = useState("");
   const videoRef = useRef([]);
   let [videos, setVideos] = useState([]);
+
+  const getMeetingCode = () => {
+    const path = window.location.pathname;
+    return path.split("/")[1]; // Gets the part after the first /
+  };
+
+  const saveToHistory = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const meetingCode = getMeetingCode();
+      await axios.post("http://localhost:9000/api/v1/users/add_activity", {
+        token: token,
+        meeting_code: meetingCode,
+      });
+      console.log("Meeting saved to history");
+    } catch (error) {
+      console.error("Error saving meeting to history:", error);
+    }
+  };
 
   let getUserMediaSuccess = (stream) => {
     try {
@@ -583,24 +605,40 @@ export default function VideoMeetComponent() {
     setMessage("");
   };
 
+  let handleCallEnd = async () => {
+    try {
+      let track = localVideoRef.current.srcObject.getTracks();
+      track.forEach((track) => track.stop());
+    } catch (error) {
+      console.log(error);
+    }
+    await saveToHistory();
+    navigate("/home");
+  };
   return (
-    <div className="">
+    <div className="USERNAME">
       {askForUserName === true ? (
         <div className="onboarding">
-          <h2 className=" mt-6">Enter into lobby</h2>
+          <div className="left">
+            <h2 style={{ color: "white", fontSize: "2]1rem" }}>
+              Enter Into Lobby:-
+            </h2>
 
-          <TextField
-            id="outlined-basic"
-            label="Enter UserName"
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUserName(e.target.value)}
-            // className="white"
-          />
-          <Button variant="contained" onClick={getMedia}>
-            Connect
-          </Button>
-          <div className="flex ml-30px">
+            <input
+              id="outlined-basic"
+              label="Enter UserName"
+              variant="outlined"
+              value={username}
+              placeholder="Username"
+              onChange={(e) => setUserName(e.target.value)}
+              className="name"
+            />
+            <br />
+            <button className="joinbtn" onClick={getMedia}>
+              Connect
+            </button>
+          </div>
+          <div className="right">
             <video
               className="w-2xl rounded-xl"
               ref={localVideoRef}
@@ -627,7 +665,16 @@ export default function VideoMeetComponent() {
                             ? "3px solid #ce0b0b"
                             : "3px solid #0bcece",
                       }}>
-                      <div className="username">{item.sender}</div>
+                      <div
+                        className="username"
+                        style={{
+                          color:
+                            item.socketIdSender === socketIdRef.current
+                              ? " #ce0b0b"
+                              : " #e702c1",
+                        }}>
+                        {item.sender}
+                      </div>
                       <div className="msg-content">{item.data}</div>
                     </div>
                   );
@@ -654,7 +701,7 @@ export default function VideoMeetComponent() {
               </div>
             </div>
           ) : (
-            ""
+            <p>No Mesaages Yet !!!</p>
           )}
 
           <video
@@ -739,10 +786,7 @@ export default function VideoMeetComponent() {
               color="secondary">
               <MarkChatUnreadOutlinedIcon className="svg1 " />
             </Badge>
-            <CallEndOutlinedIcon
-              className="callend"
-              onClick={() => navigate("/")}
-            />
+            <CallEndOutlinedIcon className="callend" onClick={handleCallEnd} />
           </div>
         </div>
       )}

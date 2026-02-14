@@ -47,7 +47,7 @@ export default function Authentication() {
           setPassword("");
           // Redirect to home page after a short delay
           setTimeout(() => {
-            navigate("/");
+            navigate("/home");
           }, 1500);
         }
       }
@@ -83,6 +83,7 @@ export default function Authentication() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid
+        style={{ backgroundColor: "black" }}
         container
         component="main"
         sx={{
@@ -98,6 +99,7 @@ export default function Authentication() {
         }}>
         <CssBaseline />
         <Grid
+          className="fix1"
           sx={{
             backgroundImage: "url(https://random.danielpetrica.com/api/random)",
             backgroundRepeat: "no-repeat",
@@ -109,8 +111,12 @@ export default function Authentication() {
             backgroundPosition: "center",
           }}
         />
-        <Grid component={Paper} elevation={6} square></Grid>
-        <Grid component={Paper} square>
+        <Grid className="fix1" component={Paper} elevation={6} square></Grid>
+        <Grid
+          className="fix"
+          component={Paper}
+          style={{ backgroundColor: "black" }}
+          square>
           <Box
             sx={{
               my: 8,
@@ -142,42 +148,38 @@ export default function Authentication() {
 
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <Box sx={{ visibility: formState === 1 ? "visible" : "hidden" }}>
-                <TextField
+                <input
+                  className="user"
                   margin="normal"
                   required={formState === 1}
-                  fullWidth
                   id="Name"
-                  label="Full Name"
+                  placeholder="Full Name"
                   name="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </Box>
-
-              <TextField
-                margin="normal"
+              <input
+                className="user"
                 required
-                fullWidth
                 id="username"
-                label="Username"
+                placeholder="Username"
                 name="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-              />
-              <TextField
-                margin="normal"
+              />{" "}
+              <br />
+              <input
+                className="user"
                 required
-                fullWidth
                 name="Password"
-                label="Password"
+                placeholder="Password"
                 value={password}
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 id="password"
               />
-
               <p style={{ color: "red" }}>{error}</p>
-
               <Button
                 type="button"
                 fullWidth

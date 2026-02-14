@@ -133,6 +133,7 @@
   /* display: flex; */
   /* color: white;
    */
+  display: flex;
   color: black;
 }
 .white {
@@ -233,4 +234,41 @@
 }
 .msg-content {
   font-weight: 100;
+}
+.USERNAME {
+  height: 100vh;
+  background-color: black;
+}
+.name {
+  border: 1px solid white;
+  height: 3rem;
+  width: 70%;
+  padding-left: 1rem;
+  color: white;
+  border-radius: 1rem;
+  margin-left: 1rem;
+  font-size: 1rem;
+}
+.joinbtn {
+  color: black;
+  background-color: white;
+  padding-inline: 1rem;
+  margin: 1rem;
+  font-size: 2rem;
+  border-radius: 1rem;
+}
+.right {
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  /* padding: 0; */
+  margin-right: 0;
+}
+.left {
+  height: 100%;
+  width: 100%;
+  padding-top: 5rem;
+  justify-content: center;
+  align-items: center;
+  display: inline-block;
 }

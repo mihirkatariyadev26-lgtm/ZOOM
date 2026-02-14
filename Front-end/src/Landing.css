@@ -33,6 +33,9 @@
   cursor: pointer;
   font-size: 1.2rem;
 }
+.NavInfo p:hover {
+  border-bottom: 1px solid white;
+}
 .MainContainer {
   width: 100vw;
   display: flex;

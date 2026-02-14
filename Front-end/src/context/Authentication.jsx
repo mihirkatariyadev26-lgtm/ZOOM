@@ -40,11 +40,25 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
+  const getUserHistory = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      let request = await client.get("/get_all_activity", {
+        params: {
+          token: token,
+        },
+      });
+      return request.data;
+    } catch (error) {
+      throw error;
+    }
+  };
   const data = {
     userData,
     setUserData,
     handleRegister,
     handleLogin,
+    getUserHistory,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };

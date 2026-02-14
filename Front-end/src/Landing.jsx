@@ -9,13 +9,16 @@ export default function LandingPage() {
           <h2 className="text-white">Durbhashi</h2>
         </div>
         <div className="NavInfo text-white">
+          <p onClick={() => navigate("/home")} role="button">
+            Home
+          </p>
           <p onClick={() => navigate("/hello")} role="button">
             Join as Guest
           </p>
           <p onClick={() => navigate("/auth")}>Register</p>
-          <div role="button" onClick={() => navigate("/auth")}>
+          <p role="button" onClick={() => navigate("/auth")}>
             Login
-          </div>
+          </p>
         </div>
       </nav>
 
@@ -25,7 +28,10 @@ export default function LandingPage() {
             Let's <span style={{ color: "#ff9839" }}>Connect</span> with the
             Spirite <br /> of Learning
           </h1>
-          <p className="text-white">Distance Doesn't Matter For LEARNING</p>
+          <p className="text-white">
+            Distance Doesn't Matter For{" "}
+            <span style={{ color: "#ff9839" }}>Learning</span>
+          </p>
           <div
             className="start text-white"
             role="button"

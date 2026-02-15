@@ -6,6 +6,7 @@
   display: flex;
   justify-content: space-evenly;
   min-height: 100vh;
+  max-height: max-content;
   height: 100%;
   display: flex;
 }
@@ -25,13 +26,14 @@
 }
 .confrenceView {
   display: flex;
+  left: 0;
   /* align-items: top; */
   justify-content: space-around;
   padding-top: 1rem;
   padding-bottom: 5.8rem;
   flex-wrap: wrap;
   /* flex-wrap: 3;   */
-  width: fit-content;
+  width: 100%;
   height: fit-content;
   /* height: fit-content; */
 
@@ -54,8 +56,9 @@
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 1rem;
   width: 100%;
-  padding: 1rem;
+  /* padding: 1rem; */
   padding-bottom: 12vh;
+  left: 0;
 }
 
 /* Video container for fullscreen */
@@ -89,8 +92,12 @@
 .conf-video {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   object-fit: cover;
   border-radius: 1rem;
+  margin-left: 0;
 }
 
 .buttonContainers {
@@ -141,17 +148,203 @@
   border: white;
 }
 
-/* Responsive breakpoints for grid mode */
-@media (max-width: 768px) {
+/* Responsive breakpoints for grid layout */
+@media (max-width: 663px) {
+  /* Default grid layout (fallback) */
   .confrenceView.grid-mode {
     grid-template-columns: 1fr;
     gap: 0.5rem;
-    padding: 0.5rem;
-    padding-bottom: 12vh;
+    padding: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 20vh;
+    align-content: start;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    left: 0;
+    width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* 2 participants (stacked vertically) */
+  .confrenceView.grid-mode-2 {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    height: 100vh;
+    padding: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 15vh;
+    gap: 0.5rem;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .confrenceView.grid-mode-2 .video-container.grid-video {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: unset;
+    border-radius: 0;
+    object-fit: cover;
+  }
+
+  /* 3 participants (1 top, 2 bottom) */
+  .confrenceView.grid-mode-3 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 18vh;
+    margin-left: 0;
+    width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .confrenceView.grid-mode-3 .video-container:first-child {
+    grid-column: span 2;
+  }
+
+  /* 4 participants (2x2 grid) */
+  .confrenceView.grid-mode-4 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 18vh;
+    margin: 0;
+    width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* 5-6 participants (2 columns) */
+  .confrenceView.grid-mode-5,
+  .confrenceView.grid-mode-6 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 18vh;
+    margin: 0;
+    width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .videoMeet {
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+  }
+
+  .confrenceView.fullscreen-mode {
+    height: 100vh;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .video-container.fullscreen-video {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .video-container.fullscreen-video .conf-video {
+    border-radius: 0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
 
   .video-container.grid-video {
-    border-radius: 0.5rem;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    overflow: hidden;
+    position: relative;
+    background-color: #222;
+    aspect-ratio: unset;
+  }
+
+  .video-container.grid-video .conf-video {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* Added for better mobile controls */
+  .buttonContainers {
+    width: 90vw;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .buttonContainers svg {
+    font-size: 2.5rem;
+    padding: 0.8rem;
+  }
+
+  /* Onboarding responsiveness */
+  .onboarding {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .onboarding .left {
+    padding-top: 2rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .onboarding .right {
+    width: 100%;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .name {
+    width: 90%;
+    margin-left: 0;
+  }
+
+  /* Chat room adjustments */
+  .chatroom {
+    width: 80vw;
+    height: 70vh;
+  }
+
+  .messagebox {
+    width: 100vw;
+  }
+
+  /* Self video sizing */
+  .meetUserVideo {
+    height: 20vh;
+    width: auto;
+    bottom: 12vh;
   }
 }
 
@@ -160,12 +353,26 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
-
 @media (min-width: 1025px) {
   .confrenceView.grid-mode {
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    max-width: 1400px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    max-width: 1100px;
     margin: 0 auto;
+  }
+
+  /* 3 Incoming Streams: 2 Grid (2+1) */
+  .confrenceView.grid-mode-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 4 Incoming Streams: 2x2 Grid */
+  .confrenceView.grid-mode-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 6 Incoming Streams: 3x3 Grid */
+  .confrenceView.grid-mode-6 {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

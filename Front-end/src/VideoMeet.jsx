@@ -717,7 +717,9 @@ export default function VideoMeetComponent() {
           />
           <div
             className={`confrenceView ${
-              videos.length === 1 ? "fullscreen-mode" : "grid-mode"
+              videos.length === 1
+                ? "fullscreen-mode"
+                : `grid-mode grid-mode-${videos.length}`
             }`}>
             {videos.map((video) => (
               <div

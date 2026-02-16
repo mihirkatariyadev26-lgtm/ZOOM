@@ -122,7 +122,7 @@ function HomeComponent() {
           </div>
         </div>
         <div className="right">
-          <img src="../public/home.png" alt="" />
+          <img src="/home.png" alt="" />
         </div>
       </div>
     </div>

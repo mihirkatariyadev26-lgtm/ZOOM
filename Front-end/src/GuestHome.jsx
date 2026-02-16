@@ -71,7 +71,7 @@ export default function GuestHome() {
           </div>
         </div>
         <div className="guest-right">
-          <img src="../public/home.png" alt="" />
+          <img src="/home.png" alt="" />
         </div>
       </div>
     </div>

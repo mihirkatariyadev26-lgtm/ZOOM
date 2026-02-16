@@ -26,10 +26,13 @@ function HomeComponent() {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:9000/api/v1/users/create_meeting", {
-        token: token,
-        meeting_code: code,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/create_meeting`,
+        {
+          token: token,
+          meeting_code: code,
+        },
+      );
       setMeetingCode(code);
     } catch (error) {
       console.error("Error creating meeting:", error);
@@ -41,7 +44,7 @@ function HomeComponent() {
     if (!meetingCode.trim()) return;
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/v1/users/check_meeting",
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/check_meeting`,
         {
           params: { meeting_code: meetingCode },
         },

@@ -11,7 +11,7 @@ export default function GuestHome() {
     if (!meetingCode.trim()) return;
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/v1/users/check_meeting",
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/check_meeting`,
         {
           params: { meeting_code: meetingCode },
         },

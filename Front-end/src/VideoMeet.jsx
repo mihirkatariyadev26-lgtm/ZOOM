@@ -16,7 +16,7 @@ import SendSharpIcon from "@mui/icons-material/SendSharp";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./context/Authentication";
 import axios from "axios";
-const serverurl = "http://localhost:9000";
+const serverurl = import.meta.env.VITE_BACKEND_URL;
 
 const connections = {};
 const peerConfigConnections = {
@@ -54,10 +54,13 @@ export default function VideoMeetComponent() {
     try {
       const token = localStorage.getItem("token");
       const meetingCode = getMeetingCode();
-      await axios.post("http://localhost:9000/api/v1/users/add_activity", {
-        token: token,
-        meeting_code: meetingCode,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/add_activity`,
+        {
+          token: token,
+          meeting_code: meetingCode,
+        },
+      );
       console.log("Meeting saved to history");
     } catch (error) {
       console.error("Error saving meeting to history:", error);

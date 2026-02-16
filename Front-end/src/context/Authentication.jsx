@@ -6,7 +6,7 @@ import httpStatus from "http-status";
 export const AuthContext = createContext();
 
 export const client = axios.create({
-  baseURL: "http://localhost:9000/api/v1/users",
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/v1/users`,
 });
 
 export const AuthProvider = ({ children }) => {

@@ -3,6 +3,7 @@ import VideoMeetComponent from "./VideoMeet.jsx";
 import LandingPage from "./Landing";
 import History from "./history.jsx";
 import HomeComponent from "./home.jsx";
+import GuestHome from "./GuestHome.jsx";
 import {
   BrowserRouter as Router,
   Routes,
@@ -21,6 +22,7 @@ function App() {
           <Route path="/auth" element={<Authentication />} />
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
           <Route path="/home" element={<HomeComponent />} />
+          <Route path="/guest" element={<GuestHome />} />
           <Route path="/History" element={<History />} />
           <Route path="/:url" element={<VideoMeetComponent />} />
         </Routes>

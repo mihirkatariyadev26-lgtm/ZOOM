@@ -4,18 +4,19 @@
   height: fit-content;
   display: flex;
   align-items: center;
-  margin-inline: 7rem;
-  margin-block: 7rem;
   justify-content: center;
   padding-inline: 3rem;
   width: fit-content;
   border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .fix1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: none;
 }
 
 .user {
@@ -30,10 +31,12 @@
 
 @media (max-width: 768px) {
   .fix {
-    margin-inline: 1rem;
-    margin-block: 2rem;
     padding-inline: 1rem;
     width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .user {

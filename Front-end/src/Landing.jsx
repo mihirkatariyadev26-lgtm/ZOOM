@@ -1,7 +1,19 @@
 import "./Landing.css";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  }, []);
+
+  const handleSignout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+  };
+
   return (
     <div className="LandingPage">
       <nav className="Nav">
@@ -12,13 +24,21 @@ export default function LandingPage() {
           <p onClick={() => navigate("/home")} role="button">
             Home
           </p>
-          <p onClick={() => navigate("/hello")} role="button">
+          <p onClick={() => navigate("/guest")} role="button">
             Join as Guest
           </p>
-          <p onClick={() => navigate("/auth")}>Register</p>
-          <p role="button" onClick={() => navigate("/auth")}>
-            Login
-          </p>
+          {isLoggedIn ? (
+            <p onClick={handleSignout} role="button">
+              Signout
+            </p>
+          ) : (
+            <>
+              <p onClick={() => navigate("/auth")}>Register</p>
+              <p role="button" onClick={() => navigate("/auth")}>
+                Login
+              </p>
+            </>
+          )}
         </div>
       </nav>
 
@@ -26,7 +46,8 @@ export default function LandingPage() {
         <div className="Tag-line ">
           <h1 className="text-6xl text-white">
             Let's <span style={{ color: "#ff9839" }}>Connect</span> with the
-            Spirite <br /> of Learning
+            Spirite <br />
+            of Learning
           </h1>
           <p className="text-white">
             Distance Doesn't Matter For{" "}

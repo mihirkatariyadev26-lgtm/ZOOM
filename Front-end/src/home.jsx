@@ -11,6 +11,20 @@ function HomeComponent() {
   const [meetingCode, setMeetingCode] = useState("");
   let navigate = useNavigate();
   const { userData } = useContext(AuthContext);
+
+  const generateMeetingCode = () => {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let code = "";
+    for (let i = 0; i < 5; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    code += "-";
+    for (let i = 0; i < 5; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setMeetingCode(code);
+  };
+
   let handelJoinVideoCall = async () => {
     if (meetingCode.trim()) {
       navigate(`/${meetingCode}`);
@@ -67,6 +81,12 @@ function HomeComponent() {
             <div className="join" role="button" onClick={handelJoinVideoCall}>
               Join
             </div>
+          </div>
+          <div
+            className="create-btn"
+            role="button"
+            onClick={generateMeetingCode}>
+            Create Meeting
           </div>
         </div>
         <div className="right">

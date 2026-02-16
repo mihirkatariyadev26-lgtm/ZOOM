@@ -612,8 +612,13 @@ export default function VideoMeetComponent() {
     } catch (error) {
       console.log(error);
     }
-    await saveToHistory();
-    navigate("/home");
+    const token = localStorage.getItem("token");
+    if (token) {
+      await saveToHistory();
+      navigate("/home");
+    } else {
+      navigate("/guest");
+    }
   };
   return (
     <div className="USERNAME">

@@ -606,12 +606,43 @@ export default function VideoMeetComponent() {
   };
 
   let handleCallEnd = async () => {
+    // Stop all media tracks (camera + mic)
     try {
-      let track = localVideoRef.current.srcObject.getTracks();
-      track.forEach((track) => track.stop());
+      if (localVideoRef.current && localVideoRef.current.srcObject) {
+        localVideoRef.current.srcObject
+          .getTracks()
+          .forEach((track) => track.stop());
+        localVideoRef.current.srcObject = null;
+      }
     } catch (error) {
       console.log(error);
     }
+
+    // Stop any remaining global streams
+    try {
+      if (window.localStream) {
+        window.localStream.getTracks().forEach((track) => track.stop());
+        window.localStream = null;
+      }
+      if (window.originalStream) {
+        window.originalStream.getTracks().forEach((track) => track.stop());
+        window.originalStream = null;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    // Close all peer connections so others re-render
+    for (let id in connections) {
+      connections[id].close();
+      delete connections[id];
+    }
+
+    // Disconnect socket — triggers "user-left" on server for remaining users
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+
     const token = localStorage.getItem("token");
     if (token) {
       await saveToHistory();

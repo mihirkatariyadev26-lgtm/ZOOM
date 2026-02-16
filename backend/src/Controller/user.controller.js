@@ -169,4 +169,73 @@ const cleanupHistory = async (req, res) => {
   }
 };
 
-export { login, signup, addToHistory, getUserHistory, cleanupHistory };
+const createMeeting = async (req, res) => {
+  const { token, meeting_code } = req.body;
+  try {
+    if (!token || !meeting_code) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: "Token and meeting_code are required",
+      });
+    }
+
+    const user = await User.findOne({ token: token });
+    if (!user) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: "User not found",
+      });
+    }
+
+    const newMeeting = new Meeting({
+      user_id: user.Username,
+      meeting_code: meeting_code,
+      date: new Date(),
+    });
+
+    await newMeeting.save();
+    console.log(`Meeting ${meeting_code} created by ${user.Username}`);
+    res.status(httpStatus.CREATED).json({
+      message: "Meeting created successfully",
+      meeting_code: meeting_code,
+    });
+  } catch (e) {
+    console.error("Create meeting error:", e);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: "An error occurred while creating the meeting",
+    });
+  }
+};
+
+const checkMeeting = async (req, res) => {
+  const { meeting_code } = req.query;
+  try {
+    if (!meeting_code) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: "Meeting code is required",
+      });
+    }
+
+    const meeting = await Meeting.findOne({ meeting_code: meeting_code });
+    if (meeting) {
+      return res.status(httpStatus.OK).json({ exists: true });
+    } else {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ exists: false, message: "Meeting not found" });
+    }
+  } catch (e) {
+    console.error("Check meeting error:", e);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: "An error occurred while checking the meeting",
+    });
+  }
+};
+
+export {
+  login,
+  signup,
+  addToHistory,
+  getUserHistory,
+  cleanupHistory,
+  createMeeting,
+  checkMeeting,
+};

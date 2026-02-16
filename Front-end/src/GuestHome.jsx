@@ -1,14 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./GuestHome.css";
+import axios from "axios";
 
 export default function GuestHome() {
   const [meetingCode, setMeetingCode] = useState("");
   const navigate = useNavigate();
 
-  const handleJoinVideoCall = () => {
-    if (meetingCode.trim()) {
-      navigate(`/${meetingCode}`);
+  const handleJoinVideoCall = async () => {
+    if (!meetingCode.trim()) return;
+    try {
+      const response = await axios.get(
+        "http://localhost:9000/api/v1/users/check_meeting",
+        {
+          params: { meeting_code: meetingCode },
+        },
+      );
+      if (response.data.exists) {
+        navigate(`/${meetingCode}`);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        alert("Meeting not found. Please check the meeting code.");
+      } else {
+        alert("Error checking meeting. Please try again.");
+      }
     }
   };
 

@@ -20,7 +20,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 app.set("port", process.env.PORT || 9000);
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
 

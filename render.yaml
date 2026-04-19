@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: zoom-app
+    env: node
+    buildCommand: cd Front-end && npm install && npm run build && cd ..
+    startCommand: node server.js
+    staticPublicPath: /

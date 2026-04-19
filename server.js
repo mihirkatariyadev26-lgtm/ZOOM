@@ -1,15 +1,39 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-// Serve static files from the build folder
-app.use(express.static(path.join(__dirname, "Front-end/build")));
+// Try different possible paths
+const possiblePaths = [
+  path.join(__dirname, "Front-end/build"),
+  path.join(__dirname, "front-end/build"),
+  path.join(__dirname, "frontend/build"),
+  path.join(process.cwd(), "Front-end/build"),
+];
 
-// SPA fallback - redirect all requests to index.html
+let buildPath = null;
+for (const p of possiblePaths) {
+  if (fs.existsSync(p)) {
+    buildPath = p;
+    console.log("✓ Found build folder at:", buildPath);
+    break;
+  }
+}
+
+if (!buildPath) {
+  console.error("✗ Build folder not found!");
+  console.error("Checked:", possiblePaths);
+  process.exit(1);
+}
+
+// Serve static files
+app.use(express.static(buildPath));
+
+// SPA fallback
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "Front-end/build/index.html"));
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 app.listen(PORT, () => {
